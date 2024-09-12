@@ -1,79 +1,77 @@
-let path = require("path");
-let fsp = require("fs/promises");
-let express = require("express");
+import express from "express";
+import fs from "fs";
+import path from "path";
+import { createServer as createViteServer } from "vite";
 
-let root = process.cwd();
-let isProduction = process.env.NODE_ENV === "production";
+const DEV_ENV = "development";
 
-function resolve(p) {
-  return path.resolve(__dirname, p);
-}
-
-async function createServer() {
-  let app = express();
-  /**
-   * @type {import('vite').ViteDevServer}
-   */
+const bootstrap = async () => {
+  const app = express();
   let vite;
 
-  if (!isProduction) {
-    vite = await require("vite").createServer({
-      root,
-      server: { middlewareMode: "ssr" },
+  if (process.env.NODE_ENV === DEV_ENV) {
+    vite = await createViteServer({
+      server: { middlewareMode: true },
+      appType: "custom",
     });
 
+    // Use Vite's middleware for development
     app.use(vite.middlewares);
   } else {
-    app.use(require("compression")());
-    app.use(express.static(resolve("dist/client")));
+    // Serve static files in production using Express' static middleware
+    app.use(express.static(path.resolve("dist/client"), { 
+      setHeaders: (res, filePath) => {
+        if (filePath.endsWith(".gz")) {
+          res.setHeader("Content-Encoding", "gzip");
+        }
+      }
+    }));
   }
 
-  app.use("*", async (req, res) => {
-    let url = req.originalUrl;
+  // Catch all route to handle SSR
+  app.use("*", async (req, res, next) => {
+    const url = req.originalUrl;
+    let template, render;
 
     try {
-      let template;
-      let render;
-
-      if (!isProduction) {
-        template = await fsp.readFile(resolve("index.html"), "utf8");
+      if (process.env.NODE_ENV === DEV_ENV) {
+        // Read and transform the index.html using Vite
+        template = fs.readFileSync(path.resolve("./index.html"), "utf-8");
         template = await vite.transformIndexHtml(url, template);
-        render = await vite
-          .ssrLoadModule("src/entry.server.tsx")
-          .then((m) => m.render);
+        render = (await vite.ssrLoadModule("/src/entry-server.tsx")).render;
       } else {
-        template = await fsp.readFile(
-          resolve("dist/client/index.html"),
-          "utf8"
+        // Use pre-built files in production
+        template = fs.readFileSync(
+          path.resolve("dist/client/index.html"),
+          "utf-8"
         );
-        render = require(resolve("dist/server/entry.server.js")).render;
+        render = (await import("./dist/server/entry-server.js")).render;
       }
 
-      try {
-        let appHtml = await render(req, res);
-        let html = template.replace("<!--app-html-->", appHtml);
-        res.setHeader("Content-Type", "text/html");
-        return res.status(200).end(html);
-      } catch (e) {
-        if (e instanceof Response && e.status >= 300 && e.status <= 399) {
-          return res.redirect(e.status, e.headers.get("Location"));
-        }
-        throw e;
-      }
+      // Render the app's HTML using the SSR function
+      const appHtml = await render({ path: url });
+
+      // Inject the rendered HTML into the template
+      const html = template.replace(`<!--ssr-outlet-->`, appHtml);
+
+      // Send the HTML response
+      res.status(200).set("Content-Type", "text/html").end(html);
     } catch (error) {
-      if (!isProduction) {
+      if (vite && vite.ssrFixStacktrace) {
         vite.ssrFixStacktrace(error);
       }
-      console.log(error.stack);
-      res.status(500).end(error.stack);
+      next(error);
     }
   });
 
-  return app;
-}
+  return { app };
+};
 
-createServer().then((app) => {
-  app.listen(3000, () => {
-    console.log("HTTP server is running at http://localhost:3000");
-  });
-});
+bootstrap()
+  .then(async ({ app }) => {
+    // Listen on port 3333
+    app.listen(3333, () => {
+      console.log("Server is running on http://localhost:3333");
+    });
+  })
+  .catch(console.error);
