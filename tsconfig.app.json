@@ -20,7 +20,10 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "paths": {
-      "@/*": ["./src/*"],
+      "@bettermode/pages/*": ["./src/pages/*"],
+      "@bettermode/utilities": ["./src/utilities/index.ts"],
+      "@bettermode/components": ["./src/components/index.ts"],
+      "@bettermode/models": ["./src/models/index.ts"],
     },
   },
   "include": ["src"]

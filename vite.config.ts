@@ -22,7 +22,19 @@ export default defineConfig({
       }
     : {
         alias: {
-          "@": path.resolve(__dirname, "./src/"),
+          "@bettermode/pages/": path.resolve(__dirname, "./src/pages"),
+          "@bettermode/utilities": path.resolve(
+            __dirname,
+            "./src/utilities/index.ts"
+          ),
+          "@bettermode/components": path.resolve(
+            __dirname,
+            "./src/components/index.ts"
+          ),
+          "@bettermode/models": path.resolve(
+            __dirname,
+            "./src/models/index.ts"
+          ),
         },
       },
   plugins: [
