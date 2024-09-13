@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@rollup/plugin-replace": "^5.0.7",
+    "@tabler/icons-react": "^3.16.0",
     "clsx": "^2.1.1",
     "compression": "^1.7.4",
     "cross-env": "^7.0.3",

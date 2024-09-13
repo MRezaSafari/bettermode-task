@@ -44,7 +44,7 @@ const queryString = `
   `;
 
 const variables = {
-  limit: 3,
+  limit: 6,
   postTypeIds: ["03yEveXEwAktciA"],
   orderByString: "publishedAt",
   reverse: true,
