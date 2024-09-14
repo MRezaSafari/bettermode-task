@@ -4,13 +4,13 @@
 
 @layer base {
   body {
-    @apply bg-coal-background;
     font-family: "Inter", sans-serif;
     font-optical-sizing: auto;
     font-style: normal;
     height: 100%;
     padding: 0;
     margin: 0;
+    background-color: rgb(21, 21, 23);
   }
 }
 
@@ -30,7 +30,7 @@
 .ring {
   stroke: #151515ac;
   fill: none;
-  stroke-width: 7;
+  stroke-width: 1;
   animation: ringWidth 1s ease-out alternate-reverse;
   animation-iteration-count: infinite;
   animation-play-state: paused;
@@ -131,10 +131,11 @@
 
 @keyframes ringWidth {
   0% {
-    stroke-width: 15;
+    stroke-width: 10;
+    stroke: #312e81;
   }
   100% {
-    stroke-width: 0.1;
+    stroke-width: 1;
   }
 }
 #radius {

@@ -1,3 +1,3 @@
-export { default as FetchKeys } from "./fetch-keys.model";
-export * from "./fetcher.model";
+export * from "./queries/posts/get-posts-response";
+export * from "./queries/posts/get-posts-variables";
 
