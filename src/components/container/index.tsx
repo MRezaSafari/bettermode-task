@@ -4,12 +4,13 @@ import { FC, ReactNode } from "react";
 interface Props {
   withPadding?: boolean;
   children: ReactNode;
+  className?: string;
 }
 
-const Container: FC<Props> = ({ withPadding = true, children }) => {
+const Container: FC<Props> = ({ withPadding = true, children, className }) => {
   return (
     <div
-      className={cn("container mx-auto", {
+      className={cn("container mx-auto", className, {
         "px-4": withPadding,
       })}
     >

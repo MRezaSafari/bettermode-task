@@ -21,12 +21,12 @@ const ProductCard: FC<Props> = ({
   tags,
   upvotes,
 }) => {
-  const renderTags = () => tags.map((tag) => <Tag title={tag} />);
+  const renderTags = () => tags.map((tag) => <Tag key={tag} title={tag} />);
   return (
     <a
       href={`/products/post/${slug}`}
       target="_blank"
-      className="block hover:scale-105 transition duration-500 ease-in-out product-card__container"
+      className="block hover:scale-105 transition duration-500 ease-in-out product-card__container "
     >
       <Box>
         <figure>

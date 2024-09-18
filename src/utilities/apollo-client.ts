@@ -1,13 +1,10 @@
-import { ApolloClient, createHttpLink, InMemoryCache } from "@apollo/client";
+import { ApolloClient, HttpLink, InMemoryCache } from '@apollo/client';
 
 const apolloClient = new ApolloClient({
   ssrMode: true,
-  link: createHttpLink({
-    uri: process.env.BASE_URL,
-    credentials: "same-origin",
-    //   headers: {
-    //     cookie: req.header('Cookie'),
-    //   },
+  link: new HttpLink({
+    uri: import.meta.env.BASE_URL,
+    credentials: 'same-origin',
   }),
   cache: new InMemoryCache(),
 });

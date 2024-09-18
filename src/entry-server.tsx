@@ -1,9 +1,8 @@
-import { ApolloProvider } from "@apollo/client";
 import { renderToString } from "react-dom/server";
 import { StaticRouter } from "react-router-dom/server";
+import { BackgroundBeams, Header } from "./components";
 import "./index.css";
 import { Router } from "./router";
-import { apolloClient } from "./utilities";
 
 interface IRenderProps {
   path: string;
@@ -12,9 +11,9 @@ interface IRenderProps {
 export const render = ({ path }: IRenderProps) => {
   return renderToString(
     <StaticRouter location={path}>
-      <ApolloProvider client={apolloClient}>
-        <Router />
-      </ApolloProvider>
+      <Header />
+      <Router />
+      <BackgroundBeams />
     </StaticRouter>
   );
 };
