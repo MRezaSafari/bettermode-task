@@ -1,4 +1,4 @@
-import cookieParser from "cookie-parser";
+import cookieParser from "cookie-parser"; // Import cookie-parser
 import express from "express";
 import fs from "fs";
 import path from "path";
@@ -10,6 +10,7 @@ const bootstrap = async () => {
   const app = express();
   let vite;
 
+  // Use cookie-parser middleware to parse cookies from the request
   app.use(cookieParser());
 
   if (process.env.NODE_ENV === DEV_ENV) {
@@ -33,12 +34,27 @@ const bootstrap = async () => {
     );
   }
 
-  // Catch all route to handle SSR
+  // Catch all route to handle SSR, including /auth/signup
   app.use("*", async (req, res, next) => {
     const url = req.originalUrl;
     let template, render;
 
     try {
+      // Retrieve the token from the cookie
+      const token = req.cookies.token || null;
+
+      // Exclude /auth/signup from token check to avoid redirection loop
+      if (url.startsWith("/auth/signup")) {
+        // Allow users to access the signup page without being redirected
+        // continue without checking token
+        // We can add more checks here later
+      } else {
+        // Redirect to /auth/signup if token is missing
+        if (!token) {
+          return res.redirect("/auth/signup");
+        }
+      }
+
       if (process.env.NODE_ENV === DEV_ENV) {
         // Read and transform the index.html using Vite
         template = fs.readFileSync(path.resolve("./index.html"), "utf-8");
@@ -53,16 +69,13 @@ const bootstrap = async () => {
         render = (await import("./dist/server/entry-server.js")).render;
       }
 
-      // Retrieve the token from the cookie
-      const token = req.cookies.token || null; // Use cookie-parser to get the 'token' cookie
-      const initialState = { token }; // Define your initial state using the token
+      const initialState = { token };
 
       // Render the app's HTML and pass the initial state
       const appHtml = await render({ path: url, initialState });
 
       // Inject the rendered HTML and initial state into the template
       let html = template.replace(`<!--ssr-outlet-->`, appHtml);
-
       if (token) {
         html = html.replace(
           `</body>`,
