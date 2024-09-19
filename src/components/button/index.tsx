@@ -47,7 +47,7 @@ const Button: React.FC<ButtonProps> = ({
     <button
       className={cn(
         buttonVariants({ variant, size }),
-        { "opacity-70 cursor-not-allowed": loading },
+        { "opacity-30 cursor-not-allowed": loading || props.disabled },
         className
       )}
       disabled={loading || props.disabled}

@@ -1,18 +1,19 @@
 import {
-    Button,
-    Container,
-    InputOTP,
-    InputOTPGroup,
-    InputOTPSlot,
+  Button,
+  Container,
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSlot,
 } from "@bettermode/components";
 import { useQuery } from "@bettermode/hooks";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 const VerifyPage: React.FC = () => {
   const query = useQuery();
   const email = query.get("email"); // Retrieve the 'email' query parameter
   const navigate = useNavigate();
+  const [value, setValue] = useState("");
 
   // Redirect if email is missing
   useEffect(() => {
@@ -29,14 +30,19 @@ const VerifyPage: React.FC = () => {
           Check your email for a code
         </h1>
         <p className="text-sm text-gray-400 mt-3">
-          Enter the 6-digit verification code we have sent you at <span className="text-indigo-500">{email}</span>{" "}
+          Enter the 6-digit verification code we have sent you at{" "}
+          <span className="text-indigo-500">{email}</span>{" "}
           <Link className="text-blue-300" to="/auth/signup">
             (change email)
           </Link>
         </p>
       </div>
       <div className="flex justify-center items-center flex-col gap-3">
-        <InputOTP maxLength={6}>
+        <InputOTP
+          maxLength={6}
+          value={value}
+          onChange={(value) => setValue(value)}
+        >
           <InputOTPGroup>
             <InputOTPSlot index={0} />
             <InputOTPSlot index={1} />
@@ -51,7 +57,7 @@ const VerifyPage: React.FC = () => {
         </p>
       </div>
 
-      <Button variant="success">Continue</Button>
+      <Button disabled={value.length < 6} variant="success">Continue</Button>
     </Container>
   );
 };
