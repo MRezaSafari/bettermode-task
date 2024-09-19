@@ -25,6 +25,7 @@
       "@bettermode/components": ["./src/components/index.ts"],
       "@bettermode/models": ["./src/models/index.ts"],
       "@bettermode/stores": ["./src/stores/index.ts"],
+      "@bettermode/hooks": ["./src/hooks/index.ts"],
     },
   },
   "include": ["src"]

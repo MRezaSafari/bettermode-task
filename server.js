@@ -34,7 +34,7 @@ const bootstrap = async () => {
     try {
       const token = req.cookies.token || null;
 
-      if (url.startsWith("/auth/signup")) {
+      if (url.startsWith("/auth/signup") || url.startsWith("/auth/verify")) {
         // Allow access to signup page without checking token
       } else if (!token) {
         return res.redirect("/auth/signup");
@@ -67,7 +67,6 @@ const bootstrap = async () => {
         </body>`
       );
 
-      // No need to inject __INITIAL_STATE__ manually
       res.status(200).set("Content-Type", "text/html").end(html);
     } catch (error) {
       if (vite && vite.ssrFixStacktrace) {
