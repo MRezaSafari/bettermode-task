@@ -41,7 +41,6 @@ const Input: FC<Props> = ({
       }
     }
 
-    // Call the provided onChange function
     if (onChange) {
       onChange(event);
     }
