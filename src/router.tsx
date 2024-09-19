@@ -8,7 +8,7 @@ import HomePage from "./pages/home";
 export const Router = () => {
   return (
     <Routes>
-      <Route index element={<HomePage />} />
+      <Route path="/" element={<HomePage />} />
       <Route path="/other" element={<AboutPage />} />
       <Route path="/auth/signup" element={<LoginPage />} />
       <Route path="/about" element={<AboutPage />} />

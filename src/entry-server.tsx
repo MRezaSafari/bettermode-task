@@ -9,11 +9,12 @@ interface IRenderProps {
 }
 
 export const render = ({ path }: IRenderProps) => {
-  return renderToString(
+  const html = renderToString(
     <StaticRouter location={path}>
       <Header />
       <Router />
       <BackgroundBeams />
     </StaticRouter>
   );
+  return html;
 };

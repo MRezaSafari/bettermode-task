@@ -1,67 +1,50 @@
-import cookieParser from "cookie-parser"; // Import cookie-parser
+import cookieParser from "cookie-parser";
 import express from "express";
 import fs from "fs";
 import path from "path";
 import { createServer as createViteServer } from "vite";
 
 const DEV_ENV = "development";
-
+const port = process.env.PORT || 3333;
+const base = process.env.BASE || "/";
 const bootstrap = async () => {
   const app = express();
   let vite;
 
-  // Use cookie-parser middleware to parse cookies from the request
   app.use(cookieParser());
 
   if (process.env.NODE_ENV === DEV_ENV) {
     vite = await createViteServer({
       server: { middlewareMode: true },
       appType: "custom",
+      base,
     });
-
-    // Use Vite's middleware for development
     app.use(vite.middlewares);
   } else {
-    // Serve static files in production using Express' static middleware
-    app.use(
-      express.static(path.resolve("dist/client"), {
-        setHeaders: (res, filePath) => {
-          if (filePath.endsWith(".gz")) {
-            res.setHeader("Content-Encoding", "gzip");
-          }
-        },
-      })
-    );
+    const compression = (await import("compression")).default;
+    const sirv = (await import("sirv")).default;
+    app.use(compression());
+    app.use(base, sirv("./dist/client", { extensions: [] }));
   }
 
-  // Catch all route to handle SSR, including /auth/signup
   app.use("*", async (req, res, next) => {
     const url = req.originalUrl;
     let template, render;
 
     try {
-      // Retrieve the token from the cookie
       const token = req.cookies.token || null;
 
-      // Exclude /auth/signup from token check to avoid redirection loop
       if (url.startsWith("/auth/signup")) {
-        // Allow users to access the signup page without being redirected
-        // continue without checking token
-        // We can add more checks here later
-      } else {
-        // Redirect to /auth/signup if token is missing
-        if (!token) {
-          return res.redirect("/auth/signup");
-        }
+        // Allow access to signup page without checking token
+      } else if (!token) {
+        return res.redirect("/auth/signup");
       }
 
       if (process.env.NODE_ENV === DEV_ENV) {
-        // Read and transform the index.html using Vite
         template = fs.readFileSync(path.resolve("./index.html"), "utf-8");
         template = await vite.transformIndexHtml(url, template);
         render = (await vite.ssrLoadModule("/src/entry-server.tsx")).render;
       } else {
-        // Use pre-built files in production
         template = fs.readFileSync(
           path.resolve("dist/client/index.html"),
           "utf-8"
@@ -69,24 +52,22 @@ const bootstrap = async () => {
         render = (await import("./dist/server/entry-server.js")).render;
       }
 
-      const initialState = { token };
+      // Render the app’s HTML with SSR
+      const appHtml = await render({ path: url });
 
-      // Render the app's HTML and pass the initial state
-      const appHtml = await render({ path: url, initialState });
-
-      // Inject the rendered HTML and initial state into the template
+      // Inject the HTML
       let html = template.replace(`<!--ssr-outlet-->`, appHtml);
-      if (token) {
-        html = html.replace(
-          `</body>`,
-          `<script>
-          window.__INITIAL_STATE__ = ${JSON.stringify(initialState)};
-          </script>
-          </body>`
-        );
-      }
 
-      // Send the HTML response
+      const initialState = { token };
+      html = html.replace(
+        `</body>`,
+        `<script>
+          window.__INITIAL_STATE__ = ${JSON.stringify(initialState)};
+        </script>
+        </body>`
+      );
+
+      // No need to inject __INITIAL_STATE__ manually
       res.status(200).set("Content-Type", "text/html").end(html);
     } catch (error) {
       if (vite && vite.ssrFixStacktrace) {
@@ -101,9 +82,8 @@ const bootstrap = async () => {
 
 bootstrap()
   .then(async ({ app }) => {
-    // Listen on port 3333
-    app.listen(3333, () => {
-      console.log("Server is running on http://localhost:3333");
+    app.listen(port, () => {
+      console.log(`Server is running on http://localhost:${port}`);
     });
   })
   .catch(console.error);
