@@ -21,6 +21,7 @@ export default defineConfig({
           '@bettermode/models': path.resolve(__dirname, './src/models/index.ts'),
           '@bettermode/stores': path.resolve(__dirname, './src/stores/index.ts'),
           '@bettermode/hooks': path.resolve(__dirname, './src/hooks/index.ts'),
+          '@bettermode/queries': path.resolve(__dirname, './src/queries/index.ts'),
         },
       },
   plugins: [

@@ -1,1 +1,1 @@
-export { default as QUERY_GET_POSTS } from "./get-posts.query";
+export { default as useGetPosts } from "./get-posts.query";

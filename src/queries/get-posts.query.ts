@@ -1,7 +1,7 @@
 import { gql, useQuery } from "@apollo/client";
-import { IGetPostsVariables } from "@bettermode/models";
+import { IGetPostsVariables, IPostsData } from "@bettermode/models";
 
-const GET_POSTS = gql`
+export const GET_POSTS = gql`
   query GetPosts(
     $after: String
     $before: String
@@ -37,17 +37,129 @@ const GET_POSTS = gql`
       }
       nodes {
         id
+        slug
+        mappingFields {
+          key
+          type
+          value
+        }
+        fields {
+          key
+          value
+          relationEntities {
+            __typename
+            medias {
+              __typename
+              ... on Emoji {
+                __typename
+                id
+                text
+              }
+              ... on File {
+                __typename
+                downloadUrl
+                extension
+                id
+                name
+                size
+                status
+                url
+              }
+              ... on Image {
+                __typename
+                cropHeight
+                cropWidth
+                cropX
+                cropY
+                cropZoom
+                dominantColorHex
+                downloadUrl
+                dpi
+                height
+                id
+                name
+                status
+                url
+                urls {
+                  __typename
+                  full
+                  large
+                  medium
+                  small
+                  thumb
+                }
+                width
+              }
+            }
+          }
+        }
         title
+        repliesCount
+        totalRepliesCount
+        reactionsCount
         description
-        createdAt
-        publishedAt
+        customSeoDetail {
+          description
+          noIndex
+          thumbnail {
+            ... on Image {
+              __typename
+              id
+              url
+              width
+              height
+              dominantColorHex
+              dpi
+              cropHeight
+              cropWidth
+              cropX
+              cropY
+              cropZoom
+              urls {
+                __typename
+                full
+                large
+                medium
+                small
+                thumb
+              }
+            }
+            ... on Emoji {
+              __typename
+              id
+              text
+            }
+            ... on Glyph {
+              __typename
+              id
+              text
+              variant
+            }
+            ... on File {
+              id
+              name
+              url
+            }
+          }
+          thumbnailId
+          title
+          canonicalUrl
+        }
+        relativeUrl
+        url
+        tags {
+          description
+          id
+          slug
+          title
+        }
       }
     }
   }
 `;
 
 const useGetPosts = (variables: IGetPostsVariables) => {
-  const { data, loading, error, fetchMore } = useQuery(GET_POSTS, {
+  const { data, loading, error, fetchMore } = useQuery<IPostsData>(GET_POSTS, {
     variables,
   });
 

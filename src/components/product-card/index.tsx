@@ -1,3 +1,4 @@
+import { ITag } from "@bettermode/models";
 import { IconArrowUp, IconMessage } from "@tabler/icons-react";
 import { FC } from "react";
 import { Box, Tag } from "..";
@@ -5,8 +6,8 @@ import { Box, Tag } from "..";
 interface Props {
   name: string;
   description: string;
-  image: string;
-  tags: string[];
+  image?: string;
+  tags: ITag[];
   commentsLength: number;
   upvotes: number;
   slug: string;
@@ -21,7 +22,20 @@ const ProductCard: FC<Props> = ({
   tags,
   upvotes,
 }) => {
-  const renderTags = () => tags.map((tag) => <Tag key={tag} title={tag} />);
+  const renderTags = () =>
+    tags.map((tag) => <Tag key={tag.id} title={tag.title} />);
+
+  const getImageUrl = (value?: string) => {
+    if (!value) return;
+
+    const transformedValue = JSON.parse(value) as {
+      id: string;
+      relation: string;
+    };
+
+    return `https://tribe-s3-production.imgix.net/${transformedValue.id}?fit=max&w=200&auto=compress,format`;
+  };
+
   return (
     <a
       href={`/products/post/${slug}`}
@@ -32,11 +46,11 @@ const ProductCard: FC<Props> = ({
         <figure>
           <header className=" w-full flex justify-center border-b border-b-coal-border p-4 overflow-hidden relative">
             <img
-              src={image}
+              src={getImageUrl(image)}
               alt={name}
               width={72}
               height={72}
-              className="rounded-full"
+              className="rounded-full w-[72px] h-[72px] object-cover"
             />
             <div className="display-middle">
               <svg
@@ -99,7 +113,7 @@ const ProductCard: FC<Props> = ({
               </div>
             </div>
             <h3 className="mt-4 text-xl font-bold tracking-wider">{name}</h3>
-            <p className="text-sm text-gray-600">{description}</p>
+            <p className="text-sm text-gray-600 line-clamp-1">{description}</p>
           </div>
         </figure>
       </Box>
