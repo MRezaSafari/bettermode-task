@@ -1,9 +1,9 @@
-import fs from 'fs';
-import { print } from 'graphql';
-import gql from 'graphql-tag';
-import fetch from 'node-fetch';
-import path from 'path';
-import { fileURLToPath } from 'url';
+import fs from "fs";
+import { print } from "graphql";
+import gql from "graphql-tag";
+import fetch from "node-fetch";
+import path from "path";
+import { fileURLToPath } from "url";
 
 // Get the file path of the current module
 const __filename = fileURLToPath(import.meta.url);
@@ -12,24 +12,18 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Resolve the path to your .graphql file
-const filePath = path.resolve(__dirname, '../gql/get-posts.graphql');
+const filePath = path.resolve(__dirname, "../gql/get-post.graphql");
 
 // Read and parse the .graphql file
-const queryString = fs.readFileSync(filePath, 'utf8');
-const GET_POSTS_GQL = gql`${queryString}`;
+const queryString = fs.readFileSync(filePath, "utf8");
+const GET_POSTS_GQL = gql`
+  ${queryString}
+`;
 
 // Convert the parsed GraphQL query back to a string
 const query = print(GET_POSTS_GQL);
 
-const variables = {
-  limit: 6,
-  postTypeIds: ["DWq1nJxcUBfmFp3"],
-  orderByString: "publishedAt",
-  reverse: false,
-  filterBy: [],
-};
-
-async function fetchPosts(token) {
+async function fetchPosts(token, id) {
   try {
     const response = await fetch("https://api.bettermode.com/", {
       method: "POST",
@@ -39,7 +33,9 @@ async function fetchPosts(token) {
       },
       body: JSON.stringify({
         query,
-        variables,
+        variables: {
+          id,
+        },
       }),
     });
 

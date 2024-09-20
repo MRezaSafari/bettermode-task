@@ -1,6 +1,7 @@
 import { ApolloProvider } from "@apollo/client";
 import { loadDevMessages, loadErrorMessages } from "@apollo/client/dev";
 import { hydrateRoot } from "react-dom/client";
+import { Helmet, HelmetProvider } from "react-helmet-async";
 import { BrowserRouter } from "react-router-dom";
 import { BackgroundBeams, Header } from "./components";
 import "./index.css";
@@ -22,10 +23,15 @@ useServerStore.setState({
 hydrateRoot(
   document.getElementById("app") as HTMLElement,
   <BrowserRouter>
-    <ApolloProvider client={apolloClient}>
-      <Header />
-      <Router posts={initialState.posts} />
-      <BackgroundBeams />
-    </ApolloProvider>
+    <HelmetProvider>
+      <Helmet>
+        <title>BetterHunt</title>
+      </Helmet>
+      <ApolloProvider client={apolloClient}>
+        <Header />
+        <Router posts={initialState.posts} post={initialState.post} />
+        <BackgroundBeams />
+      </ApolloProvider>
+    </HelmetProvider>
   </BrowserRouter>
 );

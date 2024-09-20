@@ -1,115 +1,7 @@
-import { gql, useLazyQuery } from "@apollo/client";
+import { useLazyQuery } from "@apollo/client";
 import { IPostsData } from "@bettermode/models";
 import { useState } from "react";
-
-export const GET_POSTS = gql`
-  query GetPosts(
-    $after: String
-    $before: String
-    $excludePins: Boolean
-    $filterBy: [PostListFilterByInput!]
-    $limit: Int!
-    $offset: Int
-    $orderBy: PostListOrderByEnum
-    $orderByString: String
-    $postTypeIds: [String!]
-    $reverse: Boolean
-    $spaceIds: [ID!]
-    $query: String
-  ) {
-    posts(
-      after: $after
-      before: $before
-      excludePins: $excludePins
-      filterBy: $filterBy
-      limit: $limit
-      offset: $offset
-      orderBy: $orderBy
-      orderByString: $orderByString
-      postTypeIds: $postTypeIds
-      reverse: $reverse
-      spaceIds: $spaceIds
-      query: $query
-    ) {
-      totalCount
-      pageInfo {
-        endCursor
-        hasNextPage
-      }
-      nodes {
-        id
-        slug
-        mappingFields {
-          key
-          type
-          value
-        }
-        fields {
-          key
-          value
-          relationEntities {
-            __typename
-            medias {
-              __typename
-              ... on Emoji {
-                __typename
-                id
-                text
-              }
-              ... on File {
-                __typename
-                downloadUrl
-                extension
-                id
-                name
-                size
-                status
-                url
-              }
-              ... on Image {
-                __typename
-                cropHeight
-                cropWidth
-                cropX
-                cropY
-                cropZoom
-                dominantColorHex
-                downloadUrl
-                dpi
-                height
-                id
-                name
-                status
-                url
-                urls {
-                  __typename
-                  full
-                  large
-                  medium
-                  small
-                  thumb
-                }
-                width
-              }
-            }
-          }
-        }
-        title
-        repliesCount
-        totalRepliesCount
-        reactionsCount
-        description
-        url
-        tags {
-          description
-          id
-          slug
-          title
-        }
-      }
-    }
-  }
-`;
+import GET_POSTS_GQL from "../gql/get-posts.graphql";
 
 const useLazyGetPosts = (initialData?: IPostsData) => {
   // State to store current data including initial and fetched data
@@ -119,12 +11,12 @@ const useLazyGetPosts = (initialData?: IPostsData) => {
 
   // Lazy query to fetch more posts when needed
   const [fetchPosts, { loading, error, fetchMore }] = useLazyQuery<IPostsData>(
-    GET_POSTS,
+    GET_POSTS_GQL,
     {
       fetchPolicy: "network-only",
       onCompleted: (data) => {
         if (!import.meta.env.SSR) {
-          setPostsData(data)
+          setPostsData(data);
         }
       },
     }

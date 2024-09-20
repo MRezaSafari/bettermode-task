@@ -1,4 +1,5 @@
 import { ITag } from "@bettermode/models";
+import { extractPostImageUrl } from "@bettermode/utilities";
 import { IconArrowUp, IconMessage } from "@tabler/icons-react";
 import { FC } from "react";
 import { Link } from "react-router-dom";
@@ -28,17 +29,6 @@ const ProductCard: FC<Props> = ({
   const renderTags = () =>
     tags.map((tag) => <Tag key={tag.id} title={tag.title} />);
 
-  const getImageUrl = (value?: string) => {
-    if (!value) return;
-
-    const transformedValue = JSON.parse(value) as {
-      id: string;
-      relation: string;
-    };
-
-    return `https://tribe-s3-production.imgix.net/${transformedValue.id}?fit=max&w=200&auto=compress,format`;
-  };
-
   return (
     <Link
       to={`/products/post/${slug}-${id}`}
@@ -48,7 +38,7 @@ const ProductCard: FC<Props> = ({
         <figure>
           <header className=" w-full flex justify-center border-b border-b-coal-border p-4 overflow-hidden relative">
             <img
-              src={getImageUrl(image)}
+              src={extractPostImageUrl(image)}
               alt={name}
               width={72}
               height={72}

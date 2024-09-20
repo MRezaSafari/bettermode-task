@@ -19,6 +19,9 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
     "paths": {
       "@bettermode/pages/*": ["./src/pages/*"],
       "@bettermode/utilities": ["./src/utilities/index.ts"],
@@ -27,8 +30,9 @@
       "@bettermode/stores": ["./src/stores/index.ts"],
       "@bettermode/hooks": ["./src/hooks/index.ts"],
       "@bettermode/queries": ["./src/queries/index.ts"],
+      "@bettermode/gql": ["./src/gql/index.ts"],
       
     },
   },
-  "include": ["src"]
+  "include": ["src", "*.graphql",]
 }

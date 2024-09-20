@@ -58,6 +58,7 @@ const HomePage: FC<IProps> = ({ posts }) => {
 
   return (
     <Container>
+     
       <main className="flex items-start gap-4 mt-4">
         <div className="w-9/12">
           <h1 className="text-white text-2xl mb-4">

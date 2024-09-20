@@ -3,6 +3,7 @@ import express from "express";
 import fs from "fs";
 import path from "path";
 import { createServer as createViteServer } from "vite";
+import fetchPost from "./src/server/get-post.query.js";
 import fetchPosts from "./src/server/get-posts.query.js";
 
 const DEV_ENV = "development";
@@ -59,12 +60,38 @@ const bootstrap = async () => {
         postsData = fetchedPostsData;
       }
 
+      let postData = {};
+
+      if (url.startsWith("/products/post")) {
+        const slug = url.replace("/products/post/");
+
+        const splitted = slug.split("-");
+
+        const postId = splitted[splitted.length - 1];
+        const { data } = await fetchPost(token, postId);
+
+        postData = data;
+      }
+
       // Render the app’s HTML with SSR
-      const appHtml = await render({ path: url, posts: postsData });
+      const { appHtml, helmet } = await render({
+        path: url,
+        posts: postsData,
+        post: postData.post,
+      });
 
       // Inject the HTML
       let html = template.replace(`<!--ssr-outlet-->`, appHtml);
-      const initialState = { token, posts: postsData };
+      const initialState = { token, posts: postsData, post: postData.post };
+
+      html = html.replace(
+        `<head>`,
+        `<head>
+          ${helmet.title.toString()}
+          ${helmet.meta.toString()}
+          ${helmet.link.toString()}
+        `
+      );
 
       html = html.replace(
         `</body>`,

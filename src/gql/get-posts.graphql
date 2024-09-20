@@ -1,0 +1,106 @@
+query GetPosts(
+  $after: String
+  $before: String
+  $excludePins: Boolean
+  $filterBy: [PostListFilterByInput!]
+  $limit: Int!
+  $offset: Int
+  $orderBy: PostListOrderByEnum
+  $orderByString: String
+  $postTypeIds: [String!]
+  $reverse: Boolean
+  $spaceIds: [ID!]
+  $query: String
+) {
+  posts(
+    after: $after
+    before: $before
+    excludePins: $excludePins
+    filterBy: $filterBy
+    limit: $limit
+    offset: $offset
+    orderBy: $orderBy
+    orderByString: $orderByString
+    postTypeIds: $postTypeIds
+    reverse: $reverse
+    spaceIds: $spaceIds
+    query: $query
+  ) {
+    totalCount
+    pageInfo {
+      endCursor
+      hasNextPage
+    }
+    nodes {
+      id
+      slug
+      mappingFields {
+        key
+        type
+        value
+      }
+      fields {
+        key
+        value
+        relationEntities {
+          __typename
+          medias {
+            __typename
+            ... on Emoji {
+              __typename
+              id
+              text
+            }
+            ... on File {
+              __typename
+              downloadUrl
+              extension
+              id
+              name
+              size
+              status
+              url
+            }
+            ... on Image {
+              __typename
+              cropHeight
+              cropWidth
+              cropX
+              cropY
+              cropZoom
+              dominantColorHex
+              downloadUrl
+              dpi
+              height
+              id
+              name
+              status
+              url
+              urls {
+                __typename
+                full
+                large
+                medium
+                small
+                thumb
+              }
+              width
+            }
+          }
+        }
+      }
+      title
+      repliesCount
+      totalRepliesCount
+      reactionsCount
+      description
+      url
+      tags {
+        description
+        id
+        slug
+        title
+      }
+    }
+  }
+}
