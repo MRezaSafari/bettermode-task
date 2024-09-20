@@ -58,7 +58,6 @@ const HomePage: FC<IProps> = ({ posts }) => {
 
   return (
     <Container>
-     
       <main className="flex items-start gap-4 mt-4">
         <div className="w-9/12">
           <h1 className="text-white text-2xl mb-4">
@@ -80,7 +79,7 @@ const HomePage: FC<IProps> = ({ posts }) => {
             </HoverBorderGradient>
           </div>
         </div>
-        <aside className="w-3/12 flex flex-col gap-6">
+        <aside className="w-3/12 flex flex-col gap-4">
           <div>
             <h2 className="text-white text-md mb-6 font-thin">
               LATEST STORIES

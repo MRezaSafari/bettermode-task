@@ -1,0 +1,6 @@
+mutation AuthFormValidateEmailMutation($input: RequestGlobalTokenInput!) {
+  validateEmail(input: $input) {
+    valid
+    suggestion
+  }
+}

@@ -7,7 +7,7 @@ import { BackgroundBeams, Header } from "./components";
 import "./index.css";
 import { Router } from "./router";
 import { useServerStore } from "./stores";
-import { apolloClient } from "./utilities";
+import createApolloClient from "./utilities/apollo-client";
 
 if (import.meta.env.DEV) {
   loadDevMessages();
@@ -20,6 +20,8 @@ useServerStore.setState({
   token: initialState.token,
 });
 
+const client = createApolloClient(initialState.token);
+
 hydrateRoot(
   document.getElementById("app") as HTMLElement,
   <BrowserRouter>
@@ -27,7 +29,7 @@ hydrateRoot(
       <Helmet>
         <title>BetterHunt</title>
       </Helmet>
-      <ApolloProvider client={apolloClient}>
+      <ApolloProvider client={client}>
         <Header />
         <Router posts={initialState.posts} post={initialState.post} />
         <BackgroundBeams />

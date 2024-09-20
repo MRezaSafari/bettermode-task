@@ -1,0 +1,7 @@
+mutation AuthFormRequestGlobalTokenCodeMutation(
+  $input: RequestGlobalTokenInput!
+) {
+  requestGlobalTokenCode(input: $input) {
+    status
+  }
+}

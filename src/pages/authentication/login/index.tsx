@@ -5,7 +5,8 @@ import {
   IconMail,
   IconPlayerPlay,
 } from "@tabler/icons-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { load } from 'recaptcha-v3';
 import { z } from "zod";
 
 const emailSchema = z.string().email("Invalid email address");
@@ -13,6 +14,28 @@ const emailSchema = z.string().email("Invalid email address");
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [isEmailValid, setIsEmailValid] = useState(true);
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+
+  // Function to execute reCAPTCHA
+  const handleCaptcha = async () => {
+    const recaptcha = await load(import.meta.env.VITE_RECAPTCHA_PUBLIC);
+    const token = await recaptcha.execute('homepage'); // 'homepage' is the action name
+    setCaptchaToken(token);
+  };
+
+  useEffect(() => {
+    console.log(captchaToken)
+  }, [captchaToken]);
+
+  const handleSubmit = async () => {
+    await handleCaptcha(); // Call reCAPTCHA before form submission
+    if (!captchaToken) {
+      alert('reCAPTCHA verification failed.');
+      return;
+    }
+    // Proceed with form submission
+    console.log('Form submitted with captcha token:', captchaToken);
+  }
 
   return (
     <Container className="h-full gap-32 mt-20 w-[50vw] flex flex-col ">
@@ -39,7 +62,7 @@ const LoginPage = () => {
             We'll email you a magic code for a password-free sign in.
           </p>
         </div>
-        <LoginButton disabled={email.length < 1 || !isEmailValid} />
+        <LoginButton disabled={email.length < 1 || !isEmailValid} onClick={handleSubmit} />
       </div>
       <div className="grid grid-cols-12 gap-3 w-full">
         <Box className="col-span-3 p-4 flex flex-col justify-center gap-3 cursor-pointer will-change-transform hover:scale-105 hover:bg-indigo-700 transition-all">

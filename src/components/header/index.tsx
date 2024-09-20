@@ -8,7 +8,9 @@ const Header = () => {
         className="text-white mt-4 mb-10 bg-coal-foreground/50 rounded-2xl border
        border-coal-border px-3 py-2 flex items-center justify-between backdrop-blur-sm"
       >
-        <img src="/logo.avif" width={30} height={30} alt="Logo" />
+        <Link to="/">
+          <img src="/logo.avif" width={30} height={30} alt="Logo" />
+        </Link>
 
         <div className="flex justify-center">
           <ul className="p-0 flex items-center gap-6 text-sm">
