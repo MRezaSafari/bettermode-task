@@ -97,54 +97,6 @@ const query = `
         totalRepliesCount
         reactionsCount
         description
-        customSeoDetail {
-          description
-          noIndex
-          thumbnail {
-            ... on Image {
-              __typename
-              id
-              url
-              width
-              height
-              dominantColorHex
-              dpi
-              cropHeight
-              cropWidth
-              cropX
-              cropY
-              cropZoom
-              urls {
-                __typename
-                full
-                large
-                medium
-                small
-                thumb
-              }
-            }
-            ... on Emoji {
-              __typename
-              id
-              text
-            }
-            ... on Glyph {
-              __typename
-              id
-              text
-              variant
-            }
-            ... on File {
-              id
-              name
-              url
-            }
-          }
-          thumbnailId
-          title
-          canonicalUrl
-        }
-        relativeUrl
         url
         tags {
           description
@@ -164,7 +116,6 @@ const variables = {
   reverse: false,
   filterBy: [],
 };
-
 
 async function fetchPosts(token) {
   try {

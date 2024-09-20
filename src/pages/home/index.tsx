@@ -16,7 +16,7 @@ interface IProps {
 }
 
 const HomePage: FC<IProps> = ({ posts }) => {
-  const { data, loading, error, loadMorePosts } = useLazyGetPosts(posts);
+  const { data, loading, loadMorePosts } = useLazyGetPosts(posts);
 
   const renderProducts = () => {
     return data?.posts.nodes.map((post) => (

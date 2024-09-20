@@ -13,14 +13,13 @@ const ProductCardSkeleton = () => {
               <div className="rounded-full w-[80%] h-[4px] bg-blue-400 animate-pulse"></div>
             </ul>
             <div className="rounded-full w-full h-[25px] bg-coal-foreground animate-pulse"></div>
-            
           </div>
           <h3 className="mt-4 text-xl font-bold tracking-wider w-full">
             <div className="rounded-full w-[50%] h-[17px] bg-coal-foreground animate-pulse"></div>
           </h3>
-          <p className="text-sm text-gray-600 mt-3">
+          <div className="mt-3">
             <div className="rounded-full w-[80%] h-[14px] bg-coal-foreground animate-pulse"></div>
-          </p>
+          </div>
         </div>
       </figure>
     </Box>
