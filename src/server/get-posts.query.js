@@ -1,8 +1,6 @@
-import { gql, useLazyQuery } from "@apollo/client";
-import { IPostsData } from "@bettermode/models";
-import { useState } from "react";
+import fetch from "node-fetch";
 
-export const GET_POSTS = gql`
+const query = `
   query GetPosts(
     $after: String
     $before: String
@@ -159,69 +157,41 @@ export const GET_POSTS = gql`
   }
 `;
 
-const useLazyGetPosts = (initialData?: IPostsData) => {
-  // State to store current data including initial and fetched data
-  const [postsData, setPostsData] = useState<IPostsData | undefined>(
-    initialData
-  );
-
-  // Lazy query to fetch more posts when needed
-  const [fetchPosts, { loading, error, fetchMore }] = useLazyQuery<IPostsData>(
-    GET_POSTS,
-    {
-      fetchPolicy: "network-only",
-      nextFetchPolicy: "cache-first",
-    }
-  );
-
-  // Function to load more posts, combining with existing postsData
-  const loadMorePosts = () => {
-    const pageInfo = postsData?.posts?.pageInfo;
-
-    if (!pageInfo?.hasNextPage) return;
-
-    fetchMore({
-      variables: {
-        after: pageInfo.endCursor,
-        limit: 6,
-        postTypeIds: ["DWq1nJxcUBfmFp3"],
-        orderByString: "publishedAt",
-        reverse: false,
-        filterBy: [],
-      },
-      updateQuery: (previousResult, { fetchMoreResult }) => {
-        if (!fetchMoreResult) return previousResult;
-
-        const newPosts = fetchMoreResult.posts.nodes;
-        const existingPosts = postsData?.posts?.nodes || [];
-
-        // Update the state with combined data
-        setPostsData({
-          ...previousResult,
-          posts: {
-            ...fetchMoreResult.posts,
-            nodes: [...existingPosts, ...newPosts],
-          },
-        });
-
-        return {
-          ...previousResult,
-          posts: {
-            ...fetchMoreResult.posts,
-            nodes: [...existingPosts, ...newPosts],
-          },
-        };
-      },
-    });
-  };
-
-  return {
-    data: postsData,
-    loading,
-    error,
-    fetchPosts,
-    loadMorePosts,
-  };
+const variables = {
+  limit: 6,
+  postTypeIds: ["DWq1nJxcUBfmFp3"],
+  orderByString: "publishedAt",
+  reverse: false,
+  filterBy: [],
 };
 
-export default useLazyGetPosts;
+
+async function fetchPosts(token) {
+  try {
+    const response = await fetch("https://api.bettermode.com/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        query,
+        variables,
+      }),
+    });
+
+    const data = await response.json();
+    if (response.ok) {
+      // Handle the response data
+      return data;
+    } else {
+      // Handle GraphQL errors
+      console.error("GraphQL error:", data.errors);
+    }
+  } catch (error) {
+    // Handle network or other errors
+    console.error("Fetch error:", error);
+  }
+}
+
+export default fetchPosts;

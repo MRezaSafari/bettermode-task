@@ -4,20 +4,19 @@ import {
   Container,
   HoverBorderGradient,
   ProductCard,
+  ProductCardSkeleton,
 } from "@bettermode/components";
-import { useGetPosts } from "@bettermode/queries";
+import { IPostsData } from "@bettermode/models";
+import { useLazyGetPosts } from "@bettermode/queries";
 import { IconArrowRight, IconHeart } from "@tabler/icons-react";
+import { FC } from "react";
 
-const HomePage = () => {
-  const variables = {
-    limit: 6,
-    postTypeIds: ["DWq1nJxcUBfmFp3"],
-    orderByString: "publishedAt",
-    reverse: false,
-    filterBy: [],
-  };
+interface IProps {
+  posts?: IPostsData;
+}
 
-  const { data, loading, error, loadMorePosts } = useGetPosts(variables);
+const HomePage: FC<IProps> = ({ posts }) => {
+  const { data, loading, error, loadMorePosts } = useLazyGetPosts(posts);
 
   const renderProducts = () => {
     return data?.posts.nodes.map((post) => (
@@ -34,6 +33,14 @@ const HomePage = () => {
     ));
   };
 
+  const renderSkeletons = () => (
+    <>
+      <ProductCardSkeleton />
+      <ProductCardSkeleton />
+      <ProductCardSkeleton />
+    </>
+  );
+
   return (
     <Container>
       <main className="flex items-start gap-4 mt-4">
@@ -43,6 +50,7 @@ const HomePage = () => {
           </h1>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 ">
             {renderProducts()}
+            {loading && renderSkeletons()}
           </div>
 
           <div className="mt-10 flex justify-center text-center">

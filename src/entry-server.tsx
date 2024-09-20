@@ -7,6 +7,7 @@ import { Router } from "./router";
 import { apolloClient } from "./utilities";
 
 import { loadDevMessages, loadErrorMessages } from "@apollo/client/dev";
+import { IPostsData } from "./models";
 
 if (import.meta.env.DEV) {
   loadDevMessages();
@@ -15,14 +16,15 @@ if (import.meta.env.DEV) {
 
 interface IRenderProps {
   path: string;
+  posts: IPostsData;
 }
 
-export const render = ({ path }: IRenderProps) => {
+export const render = ({ path, posts }: IRenderProps) => {
   const html = renderToString(
     <StaticRouter location={path}>
       <ApolloProvider client={apolloClient}>
         <Header />
-        <Router />
+        <Router posts={posts} />
         <BackgroundBeams />
       </ApolloProvider>
     </StaticRouter>

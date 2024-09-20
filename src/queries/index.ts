@@ -1,1 +1,1 @@
-export { default as useGetPosts } from "./get-posts.query";
+export { default as useLazyGetPosts } from "./get-posts.query";

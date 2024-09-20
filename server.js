@@ -3,6 +3,7 @@ import express from "express";
 import fs from "fs";
 import path from "path";
 import { createServer as createViteServer } from "vite";
+import fetchPosts from "./src/server/get-posts.query.js";
 
 const DEV_ENV = "development";
 const port = process.env.PORT || 3333;
@@ -52,13 +53,15 @@ const bootstrap = async () => {
         render = (await import("./dist/server/entry-server.js")).render;
       }
 
+      const { data } = await fetchPosts(token);
+
       // Render the app’s HTML with SSR
-      const appHtml = await render({ path: url });
+      const appHtml = await render({ path: url, posts: data });
 
       // Inject the HTML
       let html = template.replace(`<!--ssr-outlet-->`, appHtml);
+      const initialState = { token, posts: data };
 
-      const initialState = { token };
       html = html.replace(
         `</body>`,
         `<script>
