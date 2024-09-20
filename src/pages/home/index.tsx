@@ -9,19 +9,34 @@ import {
 import { IPostsData } from "@bettermode/models";
 import { useLazyGetPosts } from "@bettermode/queries";
 import { IconArrowRight, IconHeart } from "@tabler/icons-react";
-import { FC } from "react";
+import { FC, useEffect } from "react";
 
 interface IProps {
   posts?: IPostsData;
 }
 
 const HomePage: FC<IProps> = ({ posts }) => {
-  const { data, loading, loadMorePosts } = useLazyGetPosts(posts);
+  const { fetchPosts, data, loading, loadMorePosts } = useLazyGetPosts(posts);
+
+  useEffect(() => {
+    if (!import.meta.env.SSR && !posts?.posts) {
+      fetchPosts({
+        variables: {
+          limit: 6,
+          postTypeIds: ["DWq1nJxcUBfmFp3"],
+          orderByString: "publishedAt",
+          reverse: false,
+          filterBy: [],
+        },
+      });
+    }
+  }, []);
 
   const renderProducts = () => {
-    return data?.posts.nodes.map((post) => (
+    return data?.posts?.nodes?.map((post) => (
       <ProductCard
         key={post.id}
+        id={post.id}
         name={post.title}
         description={post.description}
         commentsLength={post.totalRepliesCount}

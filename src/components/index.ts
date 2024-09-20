@@ -9,5 +9,6 @@ export * from "./input-otp";
 export { default as LoginButton } from "./login-button";
 export { default as ProductCard } from "./product-card";
 export { default as ProductCardSkeleton } from "./product-card-skeleton";
+export { default as ProtectedRoute } from "./protected-route";
 export { default as Tag } from "./tag";
 

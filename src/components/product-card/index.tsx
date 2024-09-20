@@ -1,9 +1,11 @@
 import { ITag } from "@bettermode/models";
 import { IconArrowUp, IconMessage } from "@tabler/icons-react";
 import { FC } from "react";
+import { Link } from "react-router-dom";
 import { Box, Tag } from "..";
 
 interface Props {
+  id: string;
   name: string;
   description: string;
   image?: string;
@@ -16,6 +18,7 @@ interface Props {
 const ProductCard: FC<Props> = ({
   commentsLength,
   description,
+  id,
   image,
   name,
   slug,
@@ -37,9 +40,8 @@ const ProductCard: FC<Props> = ({
   };
 
   return (
-    <a
-      href={`/products/post/${slug}`}
-      target="_blank"
+    <Link
+      to={`/products/post/${slug}-${id}`}
       className="block hover:scale-105 transition duration-500 ease-in-out product-card__container "
     >
       <Box>
@@ -117,7 +119,7 @@ const ProductCard: FC<Props> = ({
           </div>
         </figure>
       </Box>
-    </a>
+    </Link>
   );
 };
 

@@ -53,14 +53,18 @@ const bootstrap = async () => {
         render = (await import("./dist/server/entry-server.js")).render;
       }
 
-      const { data } = await fetchPosts(token);
+      let postsData = [];
+      if (url === "/") {
+        const { data: fetchedPostsData } = await fetchPosts(token);
+        postsData = fetchedPostsData;
+      }
 
       // Render the app’s HTML with SSR
-      const appHtml = await render({ path: url, posts: data });
+      const appHtml = await render({ path: url, posts: postsData });
 
       // Inject the HTML
       let html = template.replace(`<!--ssr-outlet-->`, appHtml);
-      const initialState = { token, posts: data };
+      const initialState = { token, posts: postsData };
 
       html = html.replace(
         `</body>`,

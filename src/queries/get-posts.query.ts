@@ -122,7 +122,11 @@ const useLazyGetPosts = (initialData?: IPostsData) => {
     GET_POSTS,
     {
       fetchPolicy: "network-only",
-      nextFetchPolicy: "cache-first",
+      onCompleted: (data) => {
+        if (!import.meta.env.SSR) {
+          setPostsData(data)
+        }
+      },
     }
   );
 
