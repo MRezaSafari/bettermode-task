@@ -49,6 +49,7 @@ export default defineConfig({
         },
       },
   plugins: [
+    vercel(),
     graphqlLoader(),
     rollupReplace({
       preventAssignment: true,
@@ -60,7 +61,6 @@ export default defineConfig({
       include: "node_modules/**",
     }),
     react(),
-    vercel()
   ],
   optimizeDeps: {
     include: ["@apollo/client", "react-helmet-async"],
