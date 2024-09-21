@@ -3,6 +3,7 @@ import {
   ApolloLink,
   HttpLink,
   InMemoryCache,
+  NormalizedCacheObject,
   split,
 } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
@@ -21,13 +22,13 @@ const createAuthLink = (token?: string) =>
 
 // HttpLink for the default API endpoint
 const defaultHttpLink = new HttpLink({
-  uri: import.meta.env.VITE_API_URL, // Default API endpoint
+  uri: "https://api.bettermode.com", // Default API endpoint
   credentials: "same-origin",
 });
 
 // HttpLink for the second API endpoint
 const globalHttpLink = new HttpLink({
-  uri: import.meta.env.VITE_SECONDARY_API_URL + "global", // Global API endpoint
+  uri: "https://api.bettermode.com/global", // Global API endpoint
   credentials: "same-origin",
 });
 
@@ -37,7 +38,7 @@ const globalOperations = [
 ];
 
 // Function to create the Apollo Client
-const createApolloClient = (token?: string) => {
+const createApolloClient: (token?: string) => ApolloClient<NormalizedCacheObject> = (token?: string) => {
   const authLink = createAuthLink(token);
 
   // Split link based on operation name or custom logic
