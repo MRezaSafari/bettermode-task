@@ -4,7 +4,6 @@ import react from "@vitejs/plugin-react-swc";
 import path from "path";
 import { defineConfig } from "vite";
 import graphqlLoader from "vite-plugin-graphql-loader";
-import vercel from 'vite-plugin-vercel';
 
 export default defineConfig({
   resolve: process.env.USE_SOURCE
@@ -49,7 +48,6 @@ export default defineConfig({
         },
       },
   plugins: [
-    vercel(),
     graphqlLoader(),
     rollupReplace({
       preventAssignment: true,
