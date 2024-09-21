@@ -59,8 +59,8 @@ const Input: FC<Props> = ({
         className={cn(
           "flex items-center gap-3 px-4 border overflow-hidden backdrop-blur-md bg-coal-foreground/60 text-white shadow-[inset_0_0_1px_1px_#1b1b1d,0_0_4px_0px_rgb(0,0,0,0.1)] transition-all",
           {
-            "min-w-[250px] rounded-xl": weight === "small",
-            "min-w-[350px] rounded-2xl": weight === "default",
+            "md:min-w-[250px] rounded-xl": weight === "small",
+            "md:min-w-[350px] rounded-2xl": weight === "default",
             "border-coal-border focus-within:border-blue-500":
               isValid || !schema,
             "border-red-500 focus-within:border-red-500 shadow-[inset_0_0_3px_1px_#f87171,0_0_4px_0px_rgb(0,0,0,0.1)]":

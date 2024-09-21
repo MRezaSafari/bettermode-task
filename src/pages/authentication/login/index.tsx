@@ -6,7 +6,7 @@ import {
   IconPlayerPlay,
 } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
-import { load } from 'recaptcha-v3';
+import { load } from "recaptcha-v3";
 import { z } from "zod";
 
 const emailSchema = z.string().email("Invalid email address");
@@ -19,26 +19,26 @@ const LoginPage = () => {
   // Function to execute reCAPTCHA
   const handleCaptcha = async () => {
     const recaptcha = await load(import.meta.env.VITE_RECAPTCHA_PUBLIC);
-    const token = await recaptcha.execute('homepage'); // 'homepage' is the action name
+    const token = await recaptcha.execute("homepage"); // 'homepage' is the action name
     setCaptchaToken(token);
   };
 
   useEffect(() => {
-    console.log(captchaToken)
+    console.log(captchaToken);
   }, [captchaToken]);
 
   const handleSubmit = async () => {
     await handleCaptcha(); // Call reCAPTCHA before form submission
     if (!captchaToken) {
-      alert('reCAPTCHA verification failed.');
+      alert("reCAPTCHA verification failed.");
       return;
     }
     // Proceed with form submission
-    console.log('Form submitted with captcha token:', captchaToken);
-  }
+    console.log("Form submitted with captcha token:", captchaToken);
+  };
 
   return (
-    <Container className="h-full gap-32 mt-20 w-[50vw] flex flex-col ">
+    <Container className="h-full gap-32 mt-20 w-full md:w-[50vw] flex flex-col ">
       <div className="text-center">
         <h2 className="text-6xl font-bold tracking-wider">bettermode</h2>
         <p className="text-gray-400 tracking-wider font-light mt-2">
@@ -62,11 +62,14 @@ const LoginPage = () => {
             We'll email you a magic code for a password-free sign in.
           </p>
         </div>
-        <LoginButton disabled={email.length < 1 || !isEmailValid} onClick={handleSubmit} />
+        <LoginButton
+          disabled={email.length < 1 || !isEmailValid}
+          onClick={handleSubmit}
+        />
       </div>
-      <div className="grid grid-cols-12 gap-3 w-full">
-        <Box className="col-span-3 p-4 flex flex-col justify-center gap-3 cursor-pointer will-change-transform hover:scale-105 hover:bg-indigo-700 transition-all">
-          <IconBrandGoogle className="mb-5" />
+      <div className="flex md:grid grid-cols-12 flex-col md:flex-row gap-3 w-full">
+        <Box className="col-span-3 p-4 flex flex-row md:flex-col justify-between items-center md:justify-center gap-3 cursor-pointer will-change-transform hover:scale-105 hover:bg-indigo-700 transition-all">
+          <IconBrandGoogle className="md:mb-5" />
 
           <div>
             <p className="text-gray-400 tracking-wider font-light text-xs">
@@ -75,8 +78,8 @@ const LoginPage = () => {
             <p className="tracking-wider font-light ">with Google</p>
           </div>
         </Box>
-        <Box className="col-span-3 p-4 flex flex-col justify-center gap-3 cursor-pointer will-change-transform hover:scale-105 hover:bg-indigo-700 transition-all">
-          <IconBrandApple fill={"#fff"} className="mb-5" />
+        <Box className="col-span-3 p-4 flex flex-row md:flex-col justify-between items-center md:justify-center gap-3 cursor-pointer will-change-transform hover:scale-105 hover:bg-indigo-700 transition-all">
+          <IconBrandApple fill={"#fff"} className="md:mb-5" />
 
           <div>
             <p className="text-gray-400 tracking-wider font-light text-xs">
@@ -85,8 +88,8 @@ const LoginPage = () => {
             <p className="tracking-wider font-light">with Apple</p>
           </div>
         </Box>
-        <Box className="col-span-6 p-4 flex flex-col justify-center gap-3 relative will-change-transform hover:scale-105 cursor-pointer hover:bg-indigo-700 transition-all">
-          <IconPlayerPlay fill={"#fff"} className="mb-5" />
+        <Box className="col-span-6 p-4 flex flex-row md:flex-col justify-between items-center md:justify-center gap-3 relative will-change-transform hover:scale-105 cursor-pointer hover:bg-indigo-700 transition-all">
+          <IconPlayerPlay fill={"#fff"} className="md:mb-5" />
 
           <div>
             <p className="text-gray-400 tracking-wider font-light text-xs">

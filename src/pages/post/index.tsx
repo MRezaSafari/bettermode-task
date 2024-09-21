@@ -96,8 +96,8 @@ const PostPage: FC<IProps> = ({ post }) => {
         <h2 className="text-3xl font-bold tracking-wider">{postData.title}</h2>
         <p>{postData.description}</p>
       </div>
-      <section className="flex items-start gap-4 mt-4">
-        <aside className="w-3/12 flex flex-col gap-4">
+      <section className="flex items-start flex-col md:flex-row gap-4 mt-4">
+        <aside className="w-full order-2 md:order-1 md:w-3/12 flex flex-col gap-4">
           <Box className="p-4 flex gap-3 flex-col">
             <Button
               as="link"
@@ -141,7 +141,7 @@ const PostPage: FC<IProps> = ({ post }) => {
             <ul className="flex gap-2 items-center">{renderTags()}</ul>
           </Box>
         </aside>
-        <div className="w-9/12">
+        <div className="w-full order-1 md:order-2 md:w-9/12">
           <Box className="p-4 flex gap-5 flex-col">
             <p
               dangerouslySetInnerHTML={{

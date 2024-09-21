@@ -1,4 +1,5 @@
 "use client";
+import { useViewport } from "@bettermode/hooks";
 import { cn } from "@bettermode/utilities";
 import { motion } from "framer-motion";
 import { memo } from "react";
@@ -56,6 +57,11 @@ const BackgroundBeams = memo(({ className }: { className?: string }) => {
     "M-44 -573C-44 -573 24 -168 488 -41C952 86 1020 491 1020 491",
     "M-37 -581C-37 -581 31 -176 495 -49C959 78 1027 483 1027 483",
   ];
+
+  const { isMobile } = useViewport();
+
+  const viewBox = isMobile ? "0 0 196 116" : '0 0 696 616';
+
   return (
     <div
       className={cn(
@@ -67,7 +73,7 @@ const BackgroundBeams = memo(({ className }: { className?: string }) => {
         className=" z-0 h-full w-full pointer-events-none absolute "
         width="100%"
         height="100%"
-        viewBox="0 0 696 316"
+        viewBox={viewBox}
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
       >
