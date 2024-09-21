@@ -2,7 +2,7 @@
 ## Live Demo
 
 ## How to run the project
-https://bettermode-task.vercel.app
+https://bettermode.pixelfix.dev
 
 ### Option 1
 1. Install dependencies
