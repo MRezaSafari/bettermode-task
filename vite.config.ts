@@ -4,6 +4,7 @@ import react from "@vitejs/plugin-react-swc";
 import path from "path";
 import { defineConfig } from "vite";
 import graphqlLoader from "vite-plugin-graphql-loader";
+import vercel from 'vite-plugin-vercel';
 
 export default defineConfig({
   resolve: process.env.USE_SOURCE
@@ -59,11 +60,15 @@ export default defineConfig({
       include: "node_modules/**",
     }),
     react(),
+    vercel()
   ],
   optimizeDeps: {
     include: ["@apollo/client", "react-helmet-async"],
   },
   ssr: {
     noExternal: ["@apollo/client", "react-helmet-async"],
+  },
+  server: {
+    port: process.env.PORT as unknown as number,
   },
 });
