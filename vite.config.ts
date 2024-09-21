@@ -48,13 +48,15 @@ export default defineConfig({
         },
       },
   plugins: [
-    commonjs(),
     graphqlLoader(),
     rollupReplace({
       preventAssignment: true,
       values: {
         "process.env.NODE_ENV": JSON.stringify("development"),
       },
+    }),
+    commonjs({
+      include: "node_modules/**",
     }),
     react(),
   ],

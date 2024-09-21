@@ -1,14 +1,14 @@
 {
   "name": "bettermode",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "NODE_ENV=development node server",
     "build": "npm run build:client && npm run build:server",
     "build:client": "vite build --ssrManifest --outDir dist/client",
     "build:server": "vite build --ssr src/entry-server.tsx --outDir dist/server",
-    "serve": "NODE_ENV=production node server",
+    "start": "NODE_ENV=production node server",
     "test": "jest"
   },
   "dependencies": {
