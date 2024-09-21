@@ -1,0 +1,5 @@
+mutation addReaction($input: AddReactionInput!, $postId: ID!) {
+  addReaction(input: $input, postId: $postId) {
+    status
+  }
+}

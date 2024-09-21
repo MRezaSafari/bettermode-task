@@ -44,6 +44,7 @@ const HomePage: FC<IProps> = ({ posts }) => {
         tags={post.tags}
         upvotes={post.reactionsCount}
         image={post?.fields.find((f) => f.key === "product_icon")?.value}
+        reacted={post.reactions?.[0]?.reacted}
       />
     ));
   };

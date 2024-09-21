@@ -1,9 +1,9 @@
 import { ITag } from "@bettermode/models";
 import { extractPostImageUrl } from "@bettermode/utilities";
-import { IconArrowUp, IconMessage } from "@tabler/icons-react";
+import { IconMessage } from "@tabler/icons-react";
 import { FC } from "react";
 import { Link } from "react-router-dom";
-import { Box, Tag } from "..";
+import { Box, ReactionButton, Tag } from "..";
 
 interface Props {
   id: string;
@@ -14,6 +14,7 @@ interface Props {
   commentsLength: number;
   upvotes: number;
   slug: string;
+  reacted?: boolean;
 }
 
 const ProductCard: FC<Props> = ({
@@ -24,6 +25,7 @@ const ProductCard: FC<Props> = ({
   name,
   slug,
   tags,
+  reacted,
   upvotes,
 }) => {
   const renderTags = () =>
@@ -98,10 +100,12 @@ const ProductCard: FC<Props> = ({
                   <IconMessage size={16} />
                   <span>{commentsLength}</span>
                 </div>
-                <div className="text-xs flex gap-1 items-center justify-center bg-green-900 border border-green-950 px-2 py-1 rounded-md">
-                  <IconArrowUp size={16} />
-                  <span>{upvotes}</span>
-                </div>
+                <ReactionButton
+                  postId={id}
+                  hasReacted={reacted ?? false}
+                  variant="mini"
+                  totalReactions={upvotes}
+                />
               </div>
             </div>
             <h3 className="mt-4 text-xl font-bold tracking-wider">{name}</h3>

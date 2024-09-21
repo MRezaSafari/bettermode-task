@@ -271,6 +271,17 @@ query GetPost($id: ID!) {
     repliedToId
     title
     description
+    reactions {
+      count
+      reacted
+      reaction
+    }
+    tags {
+      description
+      id
+      slug
+      title
+    }
     shortcuts {
       __typename
       appId

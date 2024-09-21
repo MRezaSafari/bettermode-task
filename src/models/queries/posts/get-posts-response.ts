@@ -59,7 +59,13 @@ export interface IPostNode {
   owner: IOwner;
   tags: ITag[];
   space: ISpace;
-  reactions: unknown[];
+  reactions: IReactions[];
+}
+
+export interface IReactions {
+  count: number;
+  reacted: boolean;
+  reaction: string;
 }
 
 export interface IMappingField {
